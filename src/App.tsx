@@ -36,7 +36,7 @@ function hex2a(hexx: string) {
 function App() {
   // Creating a custom hook
   const [value, setValue] = useState(
-    "0x0755f364d9266c9146f54e65af965ede08103ebc524273e57091af8cc4a7bdfd"
+    ""
   );
   const [imgURL, setImgURL] = useState(undefined);
   function useInput(defaultValue: any) {
