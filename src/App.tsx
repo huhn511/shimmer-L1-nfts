@@ -1,22 +1,54 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useState } from "react";
+import styled from "styled-components";
 import "./App.css";
-const { SingleNodeClient, deserializeNftOutput } = require("@iota/iota.js");
-const { Converter, ReadStream } = require("@iota/util.js");
 
+// Styling a regular HTML input
+const StyledInput = styled.input`
+  display: block;
+  margin: 20px 0px;
+  border: 1px solid lightblue;
+`;
 
+const { SingleNodeClient, IndexerPluginClient } = require("@iota/iota.js");
 
 const API_ENDPOINT = "http://localhost:14265/";
 
+function isValidHttpUrl(string: any) {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
 function hex2a(hexx: string) {
   var hex = hexx.substring(2);
-  var str = '';
+  var str = "";
   for (var i = 0; i < hex.length; i += 2)
-      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
   return str;
 }
 
 function App() {
+  // Creating a custom hook
+  const [value, setValue] = useState(
+    "0x0755f364d9266c9146f54e65af965ede08103ebc524273e57091af8cc4a7bdfd"
+  );
+  const [imgURL, setImgURL] = useState(undefined);
+  function useInput(defaultValue: any) {
+    function onChange(e: any) {
+      setImgURL(undefined)
+      setValue(e.target.value);
+    }
+    return {
+      value,
+      onChange,
+    };
+  }
 
   const init = async (): Promise<void> => {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -24,47 +56,46 @@ function App() {
 
     const info = await client.info();
     console.log("Node Info", info);
-    
-    const firstResult = await client.block("0xfb26e7a2a2e6a44a7ab71d1a55eb40c8a2035ad233710afe2399fae1ba24029c");
-    console.log("firstResult", firstResult);
-    const output = await client.output("0x3459a69b8a394f64ad3b7e9b149263f0659fe8af843af4f20c690cd30177be08");
+
+    const output = await client.output(value);
     console.log("output", output);
     // Get the data from the metadata feature(type 2)
-    const data_hex = output.output.features.filter((obj: { type: number; }) => {
-      return obj.type === 2;
-    })[0].data;
+    const data_hex = output.output.immutableFeatures.filter(
+      (obj: { type: number }) => {
+        return obj.type === 2;
+      }
+    )[0].data;
     console.log("data_hex", data_hex);
     const data = hex2a(data_hex);
     console.log("data", data);
-    // const outputBytes = await client.outputRaw("0x3459a69b8a394f64ad3b7e9b149263f0659fe8af843af4f20c690cd30177be08");
-    // console.log("outputBytes", outputBytes);
-    // let data = new ReadStream(outputBytes)
-    // let test = deserializeNftOutput(data)
-    // console.log("test", test);
-    // const outputMetadata = await client.outputMetadata("0x3459a69b8a394f64ad3b7e9b149263f0659fe8af843af4f20c690cd30177be08");
-    // console.log("outputMetadata", outputMetadata);
 
+    if (isValidHttpUrl(data)) {
+      console.log("Get URL...");
+      //Get Method
+      fetch(data)
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json);
+          setImgURL(json.image);
+        });
+    } else {
+      console.log("Error: Data is not a valid url");
+    }
 
+    // const indexerPluginClient = new IndexerPluginClient(client);
+    // const data = await indexerPluginClient.nft("0x006192068630857a2761ef61fe6c067485f6bf4fb8de6b7ec6696fbabdc8606b");
+    // console.log("data", data);
   };
 
-  init()
+  init();
 
+  const inputProps = useInput("");
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <StyledInput {...inputProps} placeholder="Type in here" />
+      <span>Value: {inputProps.value} </span>
+      <br />
+      {imgURL && <img src={imgURL} />}
     </div>
   );
 }
