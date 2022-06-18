@@ -8,6 +8,14 @@ const { Converter, ReadStream } = require("@iota/util.js");
 
 const API_ENDPOINT = "http://localhost:14265/";
 
+function hex2a(hexx: string) {
+  var hex = hexx.substring(2);
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2)
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  return str;
+}
+
 function App() {
 
   const init = async (): Promise<void> => {
@@ -21,6 +29,13 @@ function App() {
     console.log("firstResult", firstResult);
     const output = await client.output("0x3459a69b8a394f64ad3b7e9b149263f0659fe8af843af4f20c690cd30177be08");
     console.log("output", output);
+    // Get the data from the metadata feature(type 2)
+    const data_hex = output.output.features.filter((obj: { type: number; }) => {
+      return obj.type === 2;
+    })[0].data;
+    console.log("data_hex", data_hex);
+    const data = hex2a(data_hex);
+    console.log("data", data);
     // const outputBytes = await client.outputRaw("0x3459a69b8a394f64ad3b7e9b149263f0659fe8af843af4f20c690cd30177be08");
     // console.log("outputBytes", outputBytes);
     // let data = new ReadStream(outputBytes)
