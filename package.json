@@ -1,7 +1,7 @@
 {
   "name": "shimmer-l1-nft",
   "version": "0.1.0",
-  "homepage": "https://huhn511.github.io/shimmer-L1-nfts/",
+  "homepage": "https://huhn511.github.io/shimmer-L1-nfts",
   "private": false,
   "dependencies": {
     "@iota/iota.js": "^2.0.0-rc.1",
