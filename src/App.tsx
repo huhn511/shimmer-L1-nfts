@@ -1,21 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import "./App.css";
-// import * as lib from "@iota/iota.js"
-
-// Styling a regular HTML input
-const StyledInput = styled.input`
-  display: block;
-  margin: 20px 0px;
-  border: 1px solid lightblue;
-`;
 
 const {
   SingleNodeClient,
   IndexerPluginClient,
   Bech32Helper,
 } = require("@iota/iota.js");
-// const lib = require("@iota/iota.js");
 
 const API_ENDPOINT = "https://api.testnet.shimmer.network";
 //const API_ENDPOINT = "http://localhost:14265/";
@@ -100,8 +90,8 @@ function App() {
     <div>
       <h1>Shimmer NFT Explorer</h1>
       <p>Search for Nft address:</p>
-      <StyledInput {...inputProps} placeholder="Type in here" />
-      <p>NFT Image:</p>
+      <input {...inputProps} placeholder="Type in here" />
+      <p >NFT Image:</p>
       <br />
       {imgURL && <img alt="NFT" src={imgURL} />}
     </div>
