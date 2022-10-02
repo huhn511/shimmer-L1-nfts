@@ -1,7 +1,10 @@
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/huhn511/shimmer-L1-nfts)
 
+# Shimmer NFT Explorer
 
-# Getting Started with Create React App
+## development
+
+Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
