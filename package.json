@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "PUBLIC_URL=https://huhn511.github.io/shimmer-L1-nfts react-scripts build",
+    "build-öocal": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
