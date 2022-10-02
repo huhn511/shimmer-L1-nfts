@@ -1,6 +1,6 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/huhn511/shimmer-L1-nfts)
-
 # Shimmer NFT Explorer
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/huhn511/shimmer-L1-nfts)
 
 ## development
 
