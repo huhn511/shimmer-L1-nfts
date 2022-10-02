@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "./App.css";
+// import * as lib from "@iota/iota.js"
 
 // Styling a regular HTML input
 const StyledInput = styled.input`
@@ -9,9 +10,15 @@ const StyledInput = styled.input`
   border: 1px solid lightblue;
 `;
 
-const { SingleNodeClient, IndexerPluginClient } = require("@iota/iota.js");
+const {
+  SingleNodeClient,
+  IndexerPluginClient,
+  Bech32Helper,
+} = require("@iota/iota.js");
+// const lib = require("@iota/iota.js");
 
-const API_ENDPOINT = "http://localhost:14265/";
+const API_ENDPOINT = "https://api.testnet.shimmer.network";
+//const API_ENDPOINT = "http://localhost:14265/";
 
 function isValidHttpUrl(string: any) {
   let url;
@@ -36,12 +43,12 @@ function hex2a(hexx: string) {
 function App() {
   // Creating a custom hook
   const [value, setValue] = useState(
-    ""
+    "rms1zq6znjsv2xu66d9ynlgk6fjxp866py3svx4nxtpp3lpzh32cw2pec8tvqxu"
   );
   const [imgURL, setImgURL] = useState(undefined);
   function useInput(defaultValue: any) {
     function onChange(e: any) {
-      setImgURL(undefined)
+      setImgURL(undefined);
       setValue(e.target.value);
     }
     return {
@@ -57,34 +64,33 @@ function App() {
     const info = await client.info();
     console.log("Node Info", info);
 
-    const output = await client.output(value);
-    console.log("output", output);
-    // Get the data from the metadata feature(type 2)
-    const data_hex = output.output.immutableFeatures.filter(
+    const indexerClient = new IndexerPluginClient(client);
+    let x = Bech32Helper.addressFromBech32(value, info.protocol.bech32Hrp);
+    const nft = await indexerClient.nft(x.nftId);
+    const output2 = await client.output(nft.items[0]);
+
+    const data_hex = output2.output.immutableFeatures.filter(
       (obj: { type: number }) => {
         return obj.type === 2;
       }
     )[0].data;
-    console.log("data_hex", data_hex);
-    const data = hex2a(data_hex);
-    console.log("data", data);
+    let data: any = hex2a(data_hex);
+    data = JSON.parse(data);
 
-    if (isValidHttpUrl(data)) {
+    if (isValidHttpUrl(data?.tokenURI)) {
       console.log("Get URL...");
-      //Get Method
-      fetch(data)
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          setImgURL(json.image);
-        });
+      // Get extern metadata
+      // fetch(data)
+      //   .then((response) => response.json())
+      //   .then((json) => {
+      //     console.log(json);
+      //     //setImgURL(json.image);
+      //     setImgURL(json.tokenURI);
+      //   });
+      setImgURL(data?.tokenURI);
     } else {
       console.log("Error: Data is not a valid url");
     }
-
-    // const indexerPluginClient = new IndexerPluginClient(client);
-    // const data = await indexerPluginClient.nft("0x006192068630857a2761ef61fe6c067485f6bf4fb8de6b7ec6696fbabdc8606b");
-    // console.log("data", data);
   };
 
   init();
@@ -92,10 +98,12 @@ function App() {
   const inputProps = useInput("");
   return (
     <div>
+      <h1>Shimmer NFT Explorer</h1>
+      <p>Search for Nft address:</p>
       <StyledInput {...inputProps} placeholder="Type in here" />
-      <span>Value: {inputProps.value} </span>
+      <p>NFT Image:</p>
       <br />
-      {imgURL && <img src={imgURL} />}
+      {imgURL && <img alt="NFT" src={imgURL} />}
     </div>
   );
 }
