@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./App.css";
 
 const {
@@ -37,24 +37,26 @@ function App() {
   const [value, setValue] = useState(
     "rms1zzt46huxwvyrjnl2706lnalcu7jxcpvtnttn4gttz3dagr4m2w4vks0ly9z"
   );
-  const [imgURL, setImgURL] = useState(undefined);
   const initialValue = [
     { tokenURI: "" }];
   const [nfts, setNfts] = useState(initialValue);
+
+  const loadDataOnlyOnce = useCallback(() => {
+    console.log(`I need ${value}!!`);
+  }, [value]);
 
 
   useEffect(() => {
     // 👇️ only runs once
     console.log('useEffect ran');
 
-    init()
-  }, [value]); // 👈️ empty dependencies array
+    loadDataOnlyOnce()
+  }, [loadDataOnlyOnce]); // 👈️ empty dependencies array
 
 
 
   function useInput(defaultValue: any) {
     function onChange(e: any) {
-      //setImgURL(undefined);
       setValue(e.target.value);
       //init()
     }
@@ -166,7 +168,6 @@ function App() {
       <p>NFT Image:</p>
       <br />
       {nfts.map((nft,index) =>
-          // {imgURL && <img alt="NFT" src={imgURL}  key={index} />}
           <img alt="NFT" src={nft.tokenURI}  key={index} />
       )}
     </div>
