@@ -31,29 +31,12 @@ function hex2a(hexx: string) {
 }
 
 function App() {
-  
-
   // Creating a custom hook
   const [value, setValue] = useState(
     "rms1zzt46huxwvyrjnl2706lnalcu7jxcpvtnttn4gttz3dagr4m2w4vks0ly9z"
   );
-  const initialValue = [
-    { tokenURI: "" }];
+  const initialValue = [{ tokenURI: "" }];
   const [nfts, setNfts] = useState(initialValue);
-
-  const loadDataOnlyOnce = useCallback(() => {
-    console.log(`I need ${value}!!`);
-  }, [value]);
-
-
-  useEffect(() => {
-    // 👇️ only runs once
-    console.log('useEffect ran');
-
-    loadDataOnlyOnce()
-  }, [loadDataOnlyOnce]); // 👈️ empty dependencies array
-
-
 
   function useInput(defaultValue: any) {
     function onChange(e: any) {
@@ -96,15 +79,14 @@ function App() {
         //     setImgURL(json.tokenURI);
         //   });
         //setImgURL(data?.tokenURI);
-        return data
+        return data;
       } else {
         console.log("Error: Data is not a valid url");
       }
     } else {
       console.log("Error: Other Token standard");
     }
-  }
-
+  };
 
   const init = async (): Promise<void> => {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -126,28 +108,28 @@ function App() {
       // const nft = await indexerClient.nfts({issuerBech32: address.nftId});
       console.log("nft", nft);
       console.log("nft.items[0])", nft.items[0]);
-      let x = await getNftByOutputId(client, nft.items[0])
+      let x = await getNftByOutputId(client, nft.items[0]);
       console.log("x", x);
-      if(x?.type === "image") {
-        console.log("nfts", nfts)
+      if (x?.type === "image") {
+        console.log("nfts", nfts);
         setNfts([x]);
-        console.log("nfts", nfts)
+        console.log("nfts", nfts);
       } else {
         setNfts([]);
-        console.log("not a nft", nfts)
+        console.log("not a nft", nfts);
       }
     } else if (address?.type === 0) {
       console.log("address: account address detected");
       const nfts1 = await indexerClient.nfts({ addressBech32: value });
       console.log("nfts", nfts);
       if (nfts1.items.length > 0) {
-        let _nfts = []
+        let _nfts = [];
         for (let index = 0; index < nfts1.items.length; index++) {
           const nftId = nfts1.items[index];
           console.log("nftId", nftId);
-          const nft = await getNftByOutputId(client, nfts1.items[index])
+          const nft = await getNftByOutputId(client, nfts1.items[index]);
           console.log("nft", nft);
-          if(nft?.type === "image") {
+          if (nft?.type === "image") {
             _nfts.push(nft);
           }
         }
@@ -159,6 +141,19 @@ function App() {
     }
   };
 
+  const loadDataOnlyOnce = useCallback(() => {
+    console.log(`I need ${value}!!`);
+    init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  useEffect(() => {
+    // 👇️ only runs once
+    console.log("useEffect ran");
+
+    loadDataOnlyOnce();
+  }, [loadDataOnlyOnce]); // 👈️ empty dependencies array
+
   const inputProps = useInput("");
   return (
     <div>
@@ -167,9 +162,9 @@ function App() {
       <input {...inputProps} placeholder="Type in here" />
       <p>NFT Image:</p>
       <br />
-      {nfts.map((nft,index) =>
-          <img alt="NFT" src={nft.tokenURI}  key={index} />
-      )}
+      {nfts.map((nft, index) => (
+        <img alt="NFT" src={nft.tokenURI} key={index} />
+      ))}
     </div>
   );
 }
