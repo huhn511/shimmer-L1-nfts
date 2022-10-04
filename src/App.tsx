@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const {
@@ -31,21 +31,78 @@ function hex2a(hexx: string) {
 }
 
 function App() {
+  
+
   // Creating a custom hook
   const [value, setValue] = useState(
-    "rms1zq6znjsv2xu66d9ynlgk6fjxp866py3svx4nxtpp3lpzh32cw2pec8tvqxu"
+    "rms1zzt46huxwvyrjnl2706lnalcu7jxcpvtnttn4gttz3dagr4m2w4vks0ly9z"
   );
   const [imgURL, setImgURL] = useState(undefined);
+  const initialValue = [
+    { tokenURI: "" }];
+  const [nfts, setNfts] = useState(initialValue);
+
+
+  useEffect(() => {
+    // 👇️ only runs once
+    console.log('useEffect ran');
+
+    init()
+  }, [value]); // 👈️ empty dependencies array
+
+
+
   function useInput(defaultValue: any) {
     function onChange(e: any) {
-      setImgURL(undefined);
+      //setImgURL(undefined);
       setValue(e.target.value);
+      //init()
     }
     return {
       value,
       onChange,
     };
   }
+
+  const getNftByOutputId = async function (client: any, outputId: string) {
+    const output2 = await client.output(outputId);
+    console.log("output2", output2);
+
+    const data_hex = output2.output.immutableFeatures.filter(
+      (obj: { type: number }) => {
+        return obj.type === 2;
+      }
+    )[0].data;
+    let data: any;
+    try {
+      data = hex2a(data_hex);
+      data = JSON.parse(data);
+    } catch (error) {
+      console.log("Error while converting metadata...");
+    }
+    console.log("data?.standard: ", data?.standard);
+
+    if (data?.standard === "IRC27") {
+      if (isValidHttpUrl(data?.tokenURI)) {
+        console.log("Get URL...");
+        // Get extern metadata
+        // fetch(data)
+        //   .then((response) => response.json())
+        //   .then((json) => {
+        //     console.log(json);
+        //     //setImgURL(json.image);
+        //     setImgURL(json.tokenURI);
+        //   });
+        //setImgURL(data?.tokenURI);
+        return data
+      } else {
+        console.log("Error: Data is not a valid url");
+      }
+    } else {
+      console.log("Error: Other Token standard");
+    }
+  }
+
 
   const init = async (): Promise<void> => {
     const client = new SingleNodeClient(API_ENDPOINT);
@@ -55,35 +112,50 @@ function App() {
     console.log("Node Info", info);
 
     const indexerClient = new IndexerPluginClient(client);
-    let x = Bech32Helper.addressFromBech32(value, info.protocol.bech32Hrp);
-    const nft = await indexerClient.nft(x.nftId);
-    const output2 = await client.output(nft.items[0]);
+    console.log("Node Info", info);
+    let address = Bech32Helper.addressFromBech32(
+      value,
+      info.protocol.bech32Hrp
+    );
+    console.log("address", address);
 
-    const data_hex = output2.output.immutableFeatures.filter(
-      (obj: { type: number }) => {
-        return obj.type === 2;
+    if (address?.type === 16) {
+      const nft = await indexerClient.nft(address.nftId);
+      // const nft = await indexerClient.nfts({issuerBech32: address.nftId});
+      console.log("nft", nft);
+      console.log("nft.items[0])", nft.items[0]);
+      let x = await getNftByOutputId(client, nft.items[0])
+      console.log("x", x);
+      if(x?.type === "image") {
+        console.log("nfts", nfts)
+        setNfts([x]);
+        console.log("nfts", nfts)
+      } else {
+        setNfts([]);
+        console.log("not a nft", nfts)
       }
-    )[0].data;
-    let data: any = hex2a(data_hex);
-    data = JSON.parse(data);
-
-    if (isValidHttpUrl(data?.tokenURI)) {
-      console.log("Get URL...");
-      // Get extern metadata
-      // fetch(data)
-      //   .then((response) => response.json())
-      //   .then((json) => {
-      //     console.log(json);
-      //     //setImgURL(json.image);
-      //     setImgURL(json.tokenURI);
-      //   });
-      setImgURL(data?.tokenURI);
+    } else if (address?.type === 0) {
+      console.log("address: account address detected");
+      const nfts1 = await indexerClient.nfts({ addressBech32: value });
+      console.log("nfts", nfts);
+      if (nfts1.items.length > 0) {
+        let _nfts = []
+        for (let index = 0; index < nfts1.items.length; index++) {
+          const nftId = nfts1.items[index];
+          console.log("nftId", nftId);
+          const nft = await getNftByOutputId(client, nfts1.items[index])
+          console.log("nft", nft);
+          if(nft?.type === "image") {
+            _nfts.push(nft);
+          }
+        }
+        console.log("_nfts", _nfts);
+        setNfts(_nfts);
+      }
     } else {
-      console.log("Error: Data is not a valid url");
+      console.log("Error: Not a valid address");
     }
   };
-
-  init();
 
   const inputProps = useInput("");
   return (
@@ -91,9 +163,12 @@ function App() {
       <h1>Shimmer NFT Explorer</h1>
       <p>Search for Nft address:</p>
       <input {...inputProps} placeholder="Type in here" />
-      <p >NFT Image:</p>
+      <p>NFT Image:</p>
       <br />
-      {imgURL && <img alt="NFT" src={imgURL} />}
+      {nfts.map((nft,index) =>
+          // {imgURL && <img alt="NFT" src={imgURL}  key={index} />}
+          <img alt="NFT" src={nft.tokenURI}  key={index} />
+      )}
     </div>
   );
 }
