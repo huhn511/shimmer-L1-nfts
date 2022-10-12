@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.073c9b0a.css",
-    "main.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.2069c747.js",
+    "main.css": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.71186deb.css",
+    "main.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.0626cb81.js",
     "static/js/787.6027279b.chunk.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/787.6027279b.chunk.js",
     "index.html": "https://huhn511.github.io/shimmer-L1-nfts/index.html",
-    "main.073c9b0a.css.map": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.073c9b0a.css.map",
-    "main.2069c747.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.2069c747.js.map",
+    "main.71186deb.css.map": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.71186deb.css.map",
+    "main.0626cb81.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.0626cb81.js.map",
     "787.6027279b.chunk.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/787.6027279b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.2069c747.js"
+    "static/css/main.71186deb.css",
+    "static/js/main.0626cb81.js"
   ]
 }
