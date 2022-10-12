@@ -1,13 +1,132 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: "DM";
+  src: url("https://faucet.testnet.shimmer.network/fonts/dmsans-bold-webfont.woff2") format("woff2"),
+    url("https://faucet.testnet.shimmer.network/fonts/dmsans-bold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: "DMBold";
+  src: url("https://faucet.testnet.shimmer.network/fonts/dmsans-medium-webfont.woff2") format("woff2"),
+    url("https://faucet.testnet.shimmer.network/fonts/dmsans-medium-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Generic Theme */
+body {
+  --bg-color: white;
+  --primary-color: rgb(102, 106, 247);
+  --primary-text-color: #25395f;
+  --secondary-text-color: #9aadce;
+  --box-color: #f6f9ff;
+  --border-color: #d8e3f5;
+}
+
+/* IOTA Theme */
+body.iota {
+  --primary-color: #108cff;
+}
+
+/* Shimmer Theme */
+body.shimmer {
+  --bg-color: #021121;
+  --primary-color: rgb(1, 173, 156);
+  --primary-text-color: white;
+  --box-color: #1b303e;
+  --border-color: #1b303e;
+}
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--primary-text-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "DM", sans-serif;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+label {
+  display: block;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-padding: 0.4em 0;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: #ccc;
+}
+
+button {
+  background-color: var(--primary-color);
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 15px 50px;
+  color: white;
+  font-size: 13px;
+  margin: 20px 0 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.content {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.contentrow {
+  margin-top: 70px;
+  padding: 0px 20px;
+}
+
+h1 {
+  color: var(--primary-text-color);
+  font-size: 32px;
+  font-family: "DMBold", sans-serif;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin: 0;
+}
+
+main {
+  background-color: var(--bg-color);
+  margin-left: 10%;
+  max-width: 380px;
+  transition: max-width 1s;
 }

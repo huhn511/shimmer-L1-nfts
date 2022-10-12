@@ -144,7 +144,7 @@ function App() {
   const loadDataOnlyOnce = useCallback(() => {
     console.log(`I need ${value}!!`);
     init();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   useEffect(() => {
@@ -156,15 +156,27 @@ function App() {
 
   const inputProps = useInput("");
   return (
-    <div>
-      <h1>Shimmer NFT Explorer</h1>
-      <p>Search for Nft address:</p>
-      <input {...inputProps} placeholder="Type in here" />
-      <p>NFT Image:</p>
-      <br />
-      {nfts.map((nft, index) => (
-        <img alt="NFT" src={nft.tokenURI} key={index} />
-      ))}
+    <div className="content">
+      <div>
+        <img
+          src="https://faucet.testnet.shimmer.network/shimmer.svg"
+          className="logo"
+          alt="Shimmer"
+        ></img>
+      </div>
+      <div className="contentrow">
+        <p className="welcome">Welcome to</p>
+        <h1>Shimmer NFT Explorer</h1>
+        <p>Search for Nft address:</p>
+        <div className="iota-input">
+          <label className="svelte-15s8o4v">Shimmer Address</label>
+          <input {...inputProps} placeholder="Type in here" />
+        </div>
+        <br />
+        {nfts.map((nft, index) => (
+          <img alt="NFT" src={nft.tokenURI} key={index} />
+        ))}
+      </div>
     </div>
   );
 }
