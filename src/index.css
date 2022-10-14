@@ -30,7 +30,7 @@ body.iota {
 }
 
 /* Shimmer Theme */
-body.shimmer {
+body {
   --bg-color: #021121;
   --primary-color: rgb(1, 173, 156);
   --primary-text-color: white;
@@ -129,4 +129,17 @@ main {
   margin-left: 10%;
   max-width: 380px;
   transition: max-width 1s;
+}
+
+input {
+  width: 100%;
+  border: none;
+  padding: 20px 20px 10px;
+  border: solid 1px var(--border-color);
+  border-radius: 10px;
+  margin: 0;
+  outline: none;
+  font-size: 12px;
+  color: var(--primary-text-color);
+  background-color: var(--bg-color);
 }

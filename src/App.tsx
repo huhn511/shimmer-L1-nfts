@@ -33,9 +33,22 @@ function hex2a(hexx: string) {
 function App() {
   // Creating a custom hook
   const [value, setValue] = useState(
-    "rms1zzt46huxwvyrjnl2706lnalcu7jxcpvtnttn4gttz3dagr4m2w4vks0ly9z"
+    ""
   );
-  const initialValue = [{ tokenURI: "" }];
+  // const initialValue = [{ tokenURI: "" }];
+  const initialValue = [
+    {
+      uri: "",
+      name: "",
+      collectionId: "",
+      collectionName: "",
+      description: "",
+      issuerName: "",
+      standard: "",
+      type: "",
+      version: "",
+    },
+  ];
   const [nfts, setNfts] = useState(initialValue);
 
   function useInput(defaultValue: any) {
@@ -68,7 +81,8 @@ function App() {
     console.log("data?.standard: ", data?.standard);
 
     if (data?.standard === "IRC27") {
-      if (isValidHttpUrl(data?.tokenURI)) {
+      // if (isValidHttpUrl(data?.tokenURI)) {
+      if (isValidHttpUrl(data?.uri)) {
         console.log("Get URL...");
         // Get extern metadata
         // fetch(data)
@@ -110,7 +124,8 @@ function App() {
       console.log("nft.items[0])", nft.items[0]);
       let x = await getNftByOutputId(client, nft.items[0]);
       console.log("x", x);
-      if (x?.type === "image") {
+      // if (x?.type === "image") {
+      if (x?.type === "image/png") {
         console.log("nfts", nfts);
         setNfts([x]);
         console.log("nfts", nfts);
@@ -121,7 +136,7 @@ function App() {
     } else if (address?.type === 0) {
       console.log("address: account address detected");
       const nfts1 = await indexerClient.nfts({ addressBech32: value });
-      console.log("nfts", nfts);
+      console.log("nfts1", nfts);
       if (nfts1.items.length > 0) {
         let _nfts = [];
         for (let index = 0; index < nfts1.items.length; index++) {
@@ -129,7 +144,7 @@ function App() {
           console.log("nftId", nftId);
           const nft = await getNftByOutputId(client, nfts1.items[index]);
           console.log("nft", nft);
-          if (nft?.type === "image") {
+          if (nft?.type === "image/png") {
             _nfts.push(nft);
           }
         }
@@ -157,6 +172,7 @@ function App() {
   const inputProps = useInput("");
   return (
     <div className="content">
+      <div style={{width: "55%"}}>
       <div>
         <img
           src="https://faucet.testnet.shimmer.network/shimmer.svg"
@@ -167,16 +183,43 @@ function App() {
       <div className="contentrow">
         <p className="welcome">Welcome to</p>
         <h1>Shimmer NFT Explorer</h1>
-        <p>Search for Nft address:</p>
+        <p className="help">This explorer show the NFTs with a IRC27 standard by an given Shimmer address.</p>
+        <p className="warning">Please enter a valid Shimmer address (rms1...)</p>
         <div className="iota-input">
-          <label className="svelte-15s8o4v">Shimmer Address</label>
-          <input {...inputProps} placeholder="Type in here" />
+          <label className="iota-input__label">Shimmer Address</label>
+          <input
+            style={{ width: "100%" }}
+            {...inputProps}
+            placeholder="Type in here"
+          />
         </div>
         <br />
         {nfts.map((nft, index) => (
-          <img alt="NFT" src={nft.tokenURI} key={index} />
+          <>
+            {(nft.uri.length > 0 && value.length > 0) && (
+              <div>
+                <img alt="NFT" src={nft.uri} key={index} />
+                <h5>{nft.name}</h5>
+                <div style={{ fontSize: ".7em" }}>
+                  <p>collectionName: {nft.collectionName}</p>
+                  <p>description: {nft.description}</p>
+                  <p>issuerName: {nft.issuerName}</p>
+                  <p>standard: {nft.standard}</p>
+                  <p>type: {nft.type}</p>
+                  <p>collectionId: {nft.collectionId}</p>
+                  <p>uri: {nft.uri}</p>
+                  <p>version: {nft.version}</p>
+                </div>
+              </div>
+            )}
+          </>
         ))}
       </div>
+      </div>
+      <div className="illustration-container">
+        <img src="https://faucet.testnet.shimmer.network/shimmer-illustration.png" alt="faucet" className="illustration svelte-15s8o4v" />
+
+        </div>
     </div>
   );
 }
