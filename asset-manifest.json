@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.05a81c6d.css",
-    "main.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.01ea137a.js",
+    "main.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.82d4bcd7.js",
     "static/js/787.6027279b.chunk.js": "https://huhn511.github.io/shimmer-L1-nfts/static/js/787.6027279b.chunk.js",
     "index.html": "https://huhn511.github.io/shimmer-L1-nfts/index.html",
     "main.05a81c6d.css.map": "https://huhn511.github.io/shimmer-L1-nfts/static/css/main.05a81c6d.css.map",
-    "main.01ea137a.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.01ea137a.js.map",
+    "main.82d4bcd7.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/main.82d4bcd7.js.map",
     "787.6027279b.chunk.js.map": "https://huhn511.github.io/shimmer-L1-nfts/static/js/787.6027279b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.05a81c6d.css",
-    "static/js/main.01ea137a.js"
+    "static/js/main.82d4bcd7.js"
   ]
 }
