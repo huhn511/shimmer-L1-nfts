@@ -125,7 +125,7 @@ function App() {
       let x = await getNftByOutputId(client, nft.items[0]);
       console.log("x", x);
       // if (x?.type === "image") {
-      if (x?.type === "image/png") {
+      if (x?.type === "image/png" && x?.type === "image/jpg" && x?.type === "image/jpeg" && x?.type === "image/gif") {
         console.log("nfts", nfts);
         setNfts([x]);
         console.log("nfts", nfts);
